@@ -1,2 +1,1 @@
-# awesomeProject
-write a interpreter in GoLang v1
+This is a hands on project while reading _Writing An Interpreter in Go_.
