@@ -1,2 +1,2 @@
 # awesomeProject
-write a interpreter in GoLang
+write a interpreter in GoLang v1
