@@ -123,6 +123,25 @@ func TestIdentifierExpression(t *testing.T) {
 	testLiteralExpression(t, stmt.Expression, "foobar")
 }
 
+func TestBooleanExpression(t *testing.T) {
+	input := "false;"
+
+	l := lexer.New(input)
+	p := New(l)
+	program := p.ParseProgram()
+	checkParserErrors(t, p)
+	if len(program.Statements) != 1 {
+		t.Fatalf("program does not have correct number of stmts. go=%d",
+			len(program.Statements))
+	}
+	stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+	if !ok {
+		t.Fatalf("program.Statement[0] is not ast.ExpressionStatement. got=%T", program.Statements[0])
+	}
+
+	testLiteralExpression(t, stmt.Expression, false)
+}
+
 func TestIntegerLiteralExpression(t *testing.T) {
 	input := "5;"
 
@@ -219,6 +238,23 @@ func testIdentifier(t *testing.T, exp ast.Expression, value string) bool {
 	return true
 }
 
+func testBoolean(t *testing.T, exp ast.Expression, value bool) bool {
+	b, ok := exp.(*ast.Boolean)
+	if !ok {
+		t.Errorf("exp not *ast.Boolean. got=%T", exp)
+		return false
+	}
+	if b.Value != value {
+		t.Errorf("b.Value not %t. got=%t", value, b.Value)
+		return false
+	}
+	if b.TokenLiteral() != fmt.Sprintf("%t", value) {
+		t.Errorf("b.TokenLiteral not %t. got=%s", value, b.TokenLiteral())
+		return false
+	}
+	return true
+}
+
 //combine helper functions
 func testLiteralExpression(t *testing.T, exp ast.Expression, expected interface{}) bool {
 	switch v := expected.(type) {
@@ -228,6 +264,8 @@ func testLiteralExpression(t *testing.T, exp ast.Expression, expected interface{
 		return testIntegerLiteral(t, exp, v)
 	case string:
 		return testIdentifier(t, exp, v)
+	case bool:
+		return testBoolean(t, exp, v)
 	}
 	t.Errorf("type of exp not handled. got=%T", exp)
 	return false
