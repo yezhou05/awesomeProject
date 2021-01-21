@@ -5,5 +5,3 @@ http://crockford.com/javascript/tdop/tdop.html
 http://journal.stuffwithstuff.com/2011/03/19/pratt-parsers-expression-parsing-made-easy/
 
 https://interpreterbook.com/lost/
-
-reading the lost chapter till Define Macros
